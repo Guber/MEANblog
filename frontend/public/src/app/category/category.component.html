@@ -1,0 +1,40 @@
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<div *ngIf="category">
+  <header class="intro-header"
+          [style.background-image]="'url(assets/img/categories/' + category._id + '/' +  category.main_img + ')'">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="post-heading">
+            <h1>{{category.name}}</h1>
+            <h2 class="subheading">{{category.description}}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1">
+        <h2>Posts</h2>
+        <hr>
+        <div class="#" *ngFor="let post of posts" class="post-preview">
+          <a [routerLink]="['/post', post._id]">
+            <h3 class="post-title">
+              {{ post.title }}
+            </h3>
+            <span class="post-subtitle">
+                {{ post.summary }}
+              </span>
+          </a>
+          <p class="post-meta">Posted by <a href="#">{{post.author}}</a> on {{post.created | date}} </p>
+          <hr>
+        </div>
+        <div *ngIf="posts.length == 0">There are no posts in this category.</div>
+      </div>
+    </div>
+  </div>
+</div>

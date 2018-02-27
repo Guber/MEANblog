@@ -1,0 +1,42 @@
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header" style="background-image: url('assets/img/home-bg.jpg')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          <h1>Int-rev Blog</h1>
+          <hr class="small">
+          <span class="subheading">Currently serving {{postCount}} posts from {{usersCount}} bloggers!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <div class="#" *ngFor="let post of posts" class="post-preview">
+        <a [routerLink]="['/post', post._id]">
+          <h2 class="post-title">
+            {{ post.title }}
+          </h2>
+          <h3 class="post-subtitle">
+            {{ post.summary }}
+          </h3>
+        </a>
+        <p class="post-meta">Posted by <a href="#">{{post.author}}</a> on {{post.created | date}} </p>
+        <hr>
+      </div>
+      <!-- Pager -->
+      <ul class="pager" *ngIf="postLimit != postCount" (click)="enlargeLimit()">
+        <li class="next">
+          <a >Older Posts &rarr;</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+

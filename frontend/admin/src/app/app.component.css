@@ -1,0 +1,40 @@
+.color-1{
+  color: rgb(96,125,139)
+}
+
+.color-1-bck{
+  background-color: #4285f4;
+}
+
+.color-2-bck{
+  background-color: rgb(255, 255, 255) !important;
+}
+
+.sidebar-link {
+display: block;
+  width: 240px;
+  padding: 14px 40px;
+  color: #535353;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  background-color: #2c72ff;
+  color: #ffffff;
+}
+
+.header-breadcrumb {
+  display:inline-block;
+}
+
+.header-breadcrumb:first-letter {text-transform: uppercase}
+
+.task {
+  display: inline-block;
+}
+
+.task:first-letter {
+  text-transform: uppercase;
+}
+

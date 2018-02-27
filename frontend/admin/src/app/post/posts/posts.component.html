@@ -1,0 +1,79 @@
+
+<mat-card style="margin-top: 40px;">
+  <mat-card-title class="intrev-card-title" >Posts in the database
+    <mat-card-subtitle >Listed out.</mat-card-subtitle>
+  </mat-card-title>
+  <div class="example-header">
+    <mat-form-field floatPlaceholder="never" style="    position: absolute;
+    top: 100px;
+    right: 20px;">
+      <input matInput #filter placeholder="Filter posts" (change)="applyFilter($event.target.value)">
+    </mat-form-field>
+  </div>
+  <mat-table #table [dataSource]="dataSource" matSort (sortChange)="console.log('eat shit')" style="margin-top: 50px;">
+
+    <ng-container matColumnDef="_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row._id}}</mat-cell>
+    </ng-container>
+
+    &lt;!&ndash; Created &ndash;&gt;
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Created</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.created | date}}</mat-cell>
+    </ng-container>
+
+    &lt;!&ndash; Author &ndash;&gt;
+    <ng-container matColumnDef="author">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Author</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.author}}</mat-cell>
+    </ng-container>
+
+    &lt;!&ndash; Title &ndash;&gt;
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Title</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.title}}</mat-cell>
+    </ng-container>
+
+    &lt;!&ndash; Thumbnail &ndash;&gt;
+    <ng-container matColumnDef="thumbnail">
+      <mat-header-cell *matHeaderCellDef> Thumnbail</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <img [src]="row.main_img" (error)="setPostImgToDefault(row)" height="50">
+      </mat-cell>
+    </ng-container>
+
+    &lt;!&ndash; Actions &ndash;&gt;
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <a mat-icon-button [routerLink]="['/post/copy/' + row._id]">
+          <mat-icon>content_copy</mat-icon>
+        </a>
+        <a mat-icon-button [routerLink]="['/post/edit/' + row._id]">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button (click)="deletePost(row)" style="color: red;">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [length]="totalPages"
+                 [pageIndex]="0"
+                 [pageSize]="25"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+
+  <mat-card-actions style="text-align: center;">
+    <button [routerLink]="['/post/add/']" mat-button>
+      <mat-icon>add</mat-icon>
+      NEW POST
+    </button>
+  </mat-card-actions>
+</mat-card>

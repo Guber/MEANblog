@@ -1,0 +1,41 @@
+<div *ngIf="!category">
+  <mat-progress-spinner mode="indeterminate" style="margin-left: auto; margin-right: auto;"></mat-progress-spinner>
+</div>
+<mat-card *ngIf="category" style="margin-top: 40px;">
+  <mat-card-title class="intrev-card-title">Category #{{category._id}}
+    <mat-card-subtitle><span class="task">{{task}}</span>ing post resource.</mat-card-subtitle>
+  </mat-card-title>
+
+  <div>
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Name" [(ngModel)]="category.name">
+    </mat-form-field>
+    <mat-form-field style="width: 100%;">
+  <textarea matInput placeholder="Description" matTextareaAutosize matAutosizeMinRows="2"
+            matAutosizeMaxRows="5" [(ngModel)]="category.description"></textarea>
+    </mat-form-field>
+  </div>
+  <div>
+    <br>
+    <div class="">
+      <label>Glavna slika: </label>
+      <button id="main_image_btn" mat-button onclick="document.getElementById('main_image').click()"
+              style="float: right;">
+        <mat-icon>photo</mat-icon>
+        SELECT A PHOTO
+      </button>
+      <div style="text-align: center; padding: 20px;">
+        <img id="main_img_img" height="150" [src]="categoryImgUrl" (error)="setMainImgToDefault()">
+      </div>
+      <input type="file"
+             name="main_image" id="main_image" style="display: none;"
+             (change)="onImageInputChange($event, true)">
+    </div>
+  </div>
+  <mat-card-actions style="text-align: center;">
+    <button mat-button (click)="saveCategory()">
+      <mat-icon>save</mat-icon>
+      SAVE
+    </button>
+  </mat-card-actions>
+</mat-card>

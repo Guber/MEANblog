@@ -1,0 +1,26 @@
+
+.outer-login-container{
+  height: 100vh; display: table;
+}
+
+.inner-login-container{
+width: 100vw; display: table-cell; vertical-align: middle; text-align: center;
+}
+
+.login-card{
+  max-width: 400px !important;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px;
+}
+
+.login-card mat-form-field {
+ /* width: 240px !important;*/
+  width: 100%;
+}
+
+.login-card mat-card-actions {
+  text-align: right;
+ /* border-top: 1px solid rgba(0,0,0,.1);
+  margin-top: 24px;*/
+}
