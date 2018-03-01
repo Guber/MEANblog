@@ -46,10 +46,10 @@ export class LoginComponent implements OnInit {
   @Output() token = new EventEmitter<string>();
 
   submitLogIn() {
-    const data = new FormData();
+    const data = {};
     if (this.name && this.password) {
-      data.append('name', this.name);
-      data.append('password', this.password);
+      data['name'] =  this.name;
+      data['password'] =  this.password;
       this.authService.submitLogIn(data).subscribe(response => {
         this.token.emit(response.token);
       }, error => {

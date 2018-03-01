@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
     if (localStorage.getItem('auth_token')) {
       this.usersService.getSelf().subscribe(user => {
         this.selfUser = user;
-        this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.selfUser._id + '/' + this.selfUser.profile_img;
+        this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.selfUser._id + '/' + this.selfUser.profileImg;
       });
     }
   }
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
     localStorage.setItem('auth_token', token);
     this.usersService.getSelf().subscribe(user => {
       this.selfUser = user;
-      this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.selfUser._id + '/' + this.selfUser.profile_img;
+      this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.selfUser._id + '/' + this.selfUser.profileImg;
     });
   }
 

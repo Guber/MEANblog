@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 
@@ -15,6 +16,8 @@ import { AuthService } from './auth.service';
 import { PostsService } from './post/posts.service';
 import { CategoriesService } from './category/categories.service';
 import { UsersService } from './user/users.service';
+import { AuthInterceptor} from './auth-interceptor';
+
 import { CategoryComponent } from './category/category/category.component';
 import { UserComponent } from './user/user/user.component';
 import { LoginComponent } from './login/login.component';
@@ -90,9 +93,15 @@ const ROUTES = [
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(ROUTES)
   ],
-   providers: [AuthService, PostsService, CategoriesService, UsersService, DatePipe],
+   providers: [AuthService, PostsService, CategoriesService, UsersService, DatePipe,
+     {
+       provide: HTTP_INTERCEPTORS,
+       useClass: AuthInterceptor,
+       multi: true
+     }],
    bootstrap: [AppComponent]
 })
 export class AppModule { }

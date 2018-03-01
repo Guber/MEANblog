@@ -38,6 +38,6 @@ export class UsersComponent implements OnInit {
   }
 
   setUserImgToDefault(user) {
-    user.profile_img = this.defaultSelfProfileImgUrl;
+    user.profileImg = this.defaultSelfProfileImgUrl;
   }
 }

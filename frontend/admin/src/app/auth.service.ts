@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class AuthService {
-  postsUrl = environment.apiUrl;
+  postsUrl = environment.publicApiUrl;
 
   constructor(private http: Http) {
   }

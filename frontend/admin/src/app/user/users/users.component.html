@@ -1,9 +1,9 @@
-<div id="search-component-spinner" *ngIf="!(totalUsers > 0)" >
-    <mat-spinner style="margin-left: auto; margin-right: auto;"></mat-spinner>
-  </div>
+<div id="search-component-spinner" *ngIf="!(totalUsers > 0)">
+  <mat-spinner style="margin-left: auto; margin-right: auto;"></mat-spinner>
+</div>
 <mat-card style="margin-top: 40px;">
   <mat-card-title class="intrev-card-title">Users in the database
-    <mat-card-subtitle >Listed out.</mat-card-subtitle>
+    <mat-card-subtitle>Listed out.</mat-card-subtitle>
   </mat-card-title>
   <div class="example-header" style="display:none">
     <mat-form-field floatPlaceholder="never" style="    position: absolute;
@@ -17,7 +17,7 @@
     <ng-container matColumnDef="image">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Image</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <img [src]="row.profile_img" (error)="setUserImgToDefault(row)" height="50"> </mat-cell>
+        <img [src]="row.profileImgUrl" (error)="setUserImgToDefault(row)" height="50"></mat-cell>
     </ng-container>
 
     &lt;!&ndash; Title &ndash;&gt;
@@ -34,10 +34,8 @@
     &lt;!&ndash; Created &ndash;&gt;
     <ng-container matColumnDef="modified">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Modified</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.modified | date}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.updatedAt | date}}</mat-cell>
     </ng-container>
-
-
 
 
     &lt;!&ndash; Actions &ndash;&gt;
@@ -48,7 +46,7 @@
         <a mat-icon-button [routerLink]="['/users/edit/' + row._id]">
           <mat-icon>edit</mat-icon>
         </a>
-        <button  mat-icon-button (click)="deleteUser(row)" style="color: red;">
+        <button mat-icon-button (click)="deleteUser(row)" style="color: red;">
           <mat-icon>clear</mat-icon>
         </button>
       </mat-cell>

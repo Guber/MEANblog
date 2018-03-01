@@ -37,12 +37,12 @@ export class UserComponent implements OnInit {
       if (this.task === 'edit' && params['id']) {
         this.usersService.getUser(+params['id']).subscribe(user => {
           this.user = user;
-          this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.user._id + '/' + this.user.profile_img;
+          this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.user._id + '/' + this.user.profileImg;
         });
       } else if (this.task === 'self') {
         this.usersService.getSelf().subscribe(user => {
           this.user = user;
-          this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.user._id + '/' + this.user.profile_img;
+          this.selfProfileImgUrl = this.dataUrl + '/img/user/' + this.user._id + '/' + this.user.profileImg;
         });
       } else if (this.task === 'add') {
         this.user = new User();
@@ -62,7 +62,7 @@ export class UserComponent implements OnInit {
     reader.onload = (e) => {
       const target: any = e.target;
       this.selfProfileImgUrl = target.result;
-      this.user.profile_img_base64 = target.result;
+      this.user.profileImgBase64 = target.result;
     };
     reader.readAsDataURL(this.file);
   }

@@ -4,8 +4,10 @@ import {Observable} from 'rxjs/Observable';
 import {UsersService} from './users.service';
 import {DataSource} from '@angular/cdk/table';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {environment} from '../../environments/environment';
 
 export class UserDataSource extends DataSource<User> {
+  dataUrl = environment.dataUrl;
   _filterChange = new BehaviorSubject('');
 
   get filter(): string {
@@ -47,6 +49,9 @@ export class UserDataSource extends DataSource<User> {
   fetchData() {
     const offset = this._paginator.pageIndex * this._paginator.pageSize;
     this.usersService.getAllUsers(this._paginator.pageSize, offset, this._sort.active, this._sort.direction, this.filter.toLowerCase()).subscribe(users => {
+      users.forEach((user) => {
+        user['profileImgUrl'] = this.dataUrl + '/img/user/' + user._id + '/' + user.profileImg;
+      });
       this.data.next(users);
     });
   }
