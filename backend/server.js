@@ -14,9 +14,9 @@ app.use(accessControl.setHeader);
 var errorHandling = require('./config/error-handling.js');
 if (app.get('env') === 'development') {
     app.use(errorHandling.errorHandlingDev);
-    process.on('uncaughtException', function (err) {
+   /* process.on('uncaughtException', function (err) {
         console.log('\r\nUncaught exception:\r\n ' + err);
-    });
+    });*/
 } else {
     app.use(errorHandling.errorHandlingProd);
 }
@@ -24,7 +24,7 @@ if (app.get('env') === 'development') {
 // api routes definitions
 var routes = require('./routes.js');
 //public api routes
-app.use('/files', express.static('../files'));
+app.use('/files', express.static(uploadData.fsLocation));
 app.use('/api/categories', routes.categories);
 app.use('/api/posts', routes.posts);
 app.use('/api/users', routes.users);

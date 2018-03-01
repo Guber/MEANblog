@@ -1,21 +1,18 @@
 var mongoose = require('mongoose');
 
 var postSchema = mongoose.Schema({
-    _id: Number,
-    title: String,
-    summary: String,
-    main_img: String,
-    body: String,
-    author: {type: String, default: "admin"},
-    created: {type: Date, default: Date.now},
-    updated: {type: Date, default: Date.now},
+    _id: {type: Number, required: true, unique: true},
+    title: {type: String, default: ""},
+    summary: {type: String, default: ""},
+    main_img: {type: String, default: ""},
+    body: {type: String, default: ""},
     hidden: {type: Boolean, default: true},
     tags: {type: [String], default: []},
     images: {type: [String], default: []},
-    author_id: Number,
-    category_id: Number,
+    authorId: {type: Number, default: 0},
+    categoryId: {type: Number, default: 0},
     locked: {type: Boolean, default: false}
-});
+}, {timestamps: true});
 
 var Post = mongoose.model("post", postSchema);
 

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-
  var tokenSchema = mongoose.Schema({
     user_id: Number,
     token: String,

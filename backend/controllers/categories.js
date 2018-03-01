@@ -1,109 +1,112 @@
 var Base64 = require('../helpers/base64/base64.js');
-var Category = require('../models/categories.js').model;
-var Post = require('../models/posts.js').model;
-var Counter = require('../models/counters.js').model;
+var CategoryModel = require('../models/categories.js').model;
+var PostModel = require('../models/posts.js').model;
 var fs = require('fs');
+var fsUpload = require("../helpers/fs/fs-upload");
 
 module.exports.list = function (req, res) {
-    Category.find(function (err, response) {
-        res.json(response);
+    CategoryModel.find(function (err, response) {
+        if (err) {
+            return next(err);
+        }
+        return res.json(response);
     });
 };
 
 module.exports.show = function (req, res) {
-    Category.findById(req.params.id, function (err, response) {
-        res.json(response);
+    CategoryModel.findById(req.params.id, function (err, response) {
+        if  (err) {
+            return next(err);
+        }
+        if (!response) {
+            return res.status(404).json({message: "No resource with that ID found in the database."});
+        }
+        return res.json(response);
     });
 };
 
 module.exports.listPosts = function (req, res) {
-    Post.find({'category_id': parseInt(req.params.id)}, function (err, response) {
+    PostModel.find({'category_id': parseInt(req.params.id)}, function (err, response) {
         if (err) {
-            return res.json({
-                id: -1, message: "Error whilst fetching data."
-            });
+            return next(err);
+        }
+        if (!response) {
+            return res.status(404).json({"message": "No resource with that ID found in the database."});
         }
         return res.json(response);
     });
 };
 
 module.exports.create = function (req, res) {
+    delete req.body['_id'];
     var categoryData = req.body;
-    if (!categoryData.name) {
-        res.send("Not enough data.");
+
+    if (categoryData['name'] === undefined){
+        return res.status(400).json({message: "Not enough data to create a a resource. Note: name is required."});
     }
 
-    Counter.findByIdAndUpdate("category_id", {$inc: {sequence_value: 1}}, function (err, response) {
-        var newCategory = new Category({
-            _id: response.sequence_value,
-            name: categoryData.name
-        });
-
-        if (categoryData.description) {
-            newCategory.description = categoryData.description;
+    sequenceValue.getNextId("category_id").then(function (sequence, err) {
+        if (err) {
+            return next(err);
+        } else if (!sequence) {
+            return res.status(404).json({message: "No resource with that ID found in the database."});
         }
 
-        if (categoryData.type) {
-            newCategory.type = categoryData.type;
-        }
+        categoryData._id = sequence.sequence_value;
+        fs.mkdirSync('./files/img/categories/' + categoryData._id);
 
-        if (categoryData.subcategories) {
-            newCategory.subcategories = categoryData.subcategories;
-        }
-
-        if (categoryData.main_img_data !== undefined) {
-            console.log(categoryData.main_img_data);
-
-            var path = './public/img/categories/';
-
-            var imageBuffer = Base64.decodeBase64Image(categoryData.main_img_data);
-            fs.writeFile(path + response.sequence_value  + '.' +imageBuffer.type, imageBuffer.data, function (err) {
+        if (categoryData['mainImgBase64']) {
+            var imageBuffer = Base64.decodeBase64Image(req.body['mainImgBase64']);
+            delete categoryData['mainImgBase64'];
+            fsUpload.upload('/img/categories/' + categoryData._id + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (res, err) {
                 if (err) {
-                    console.log(err);
-                } else {
-                    newCategory.main_img = response.sequence_value  + '.' +imageBuffer.type;
+                    return next(err);
+                } else if (res) {
+                    categoryData.mainImg = 'main.' + imageBuffer.type;
                 }
-
-                console.log("The file was saved!");
             });
         }
+
+        var newCategory = new CategoryModel(userData);
         newCategory.save(function (err) {
-            if (err)
-                res.send("error");
-            else
-                res.send("success");
+            if (err) {
+                return next(err);
+            }
+            return res.json(newCategory);
         });
 
     });
 };
 
 module.exports.update = function (req, res) {
-    var category_id = req.body._id;
-    var categoryData = {};
-    categoryData.name = req.body.name;
-    categoryData.description = req.body.description;
+    var categoryData = req.body;
+    delete categoryData['_id'];
 
-    if (req.body.main_img_data !== undefined) {
-        var path = './files/img/categories/';
-        var imageBuffer = Base64.decodeBase64Image(req.body.main_img_data);
-        categoryData.main_img = req.params.id  + '.' +imageBuffer.type;
-        fs.writeFile(path + "/"+ req.params.id + "/" +  req.params.id +'.' +imageBuffer.type, imageBuffer.data, function (err) {
+    if (req.body.mainImgBase64 !== undefined) {
+        var imageBuffer = Base64.decodeBase64Image(req.body['mainImgBase64']);
+        delete categoryData['mainImgBase64'];
+        fsUpload.upload('/img/categories/' + categoryData._id + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (res, err) {
             if (err) {
-                console.log(err);
+                return next(err);
+            } else if (res) {
+                categoryData.mainImg = 'main.' + imageBuffer.type;
             }
-
-
         });
     }
 
-    Category.findByIdAndUpdate(category_id, categoryData, function (err, response) {
+    CategoryModel.findByIdAndUpdate(req.params.id, postData, function (err, response) {
+        if (err) {
+            return next(err);
+        }
         res.json(response);
     });
 };
 
 module.exports.remove = function(req, res){
-    Category.findByIdAndRemove(req.params.id, function(err, response){
-        if(err) res.json({message: "Error in deleting category id " + req.params.id});
-        else res.json({message: "Category with id " + req.params.id + " removed."});
+    CategoryModel.findByIdAndRemove(req.params.id, function(err, response){
+        if(err) {
+            return next(err);
+        }
+        return res.json(response);
     });
 };
