@@ -1,42 +1,44 @@
 var fs = require('fs');
+var rimraf = require('rimraf');
 var Base64 = require('../helpers/base64/base64.js');
 var sequenceValue = require('../helpers/mongodb/sequence-value.js');
 var selectOptions = require('../helpers/mongodb/select-options.js');
+var fsUpload = require('../helpers/fs/fs-upload.js');
 var PostModel = require('../models/posts.js').model;
 
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res, next) {
     var options = selectOptions.setOptions(req);
     if (options.filter) {
         PostModel.find({$or:[{title: options.filter},{author:options.filter},{description:options.filter},{content:options.filter}]})
             .skip(options.offset).limit(options.limit).sort(options.orderDirection+''+options.orderBy).exec(
-            function (err, response) {
+            function (err, doc) {
                 if (err) {
                     return next(err);
                 }
-                return res.json(response);
+                return res.json(doc);
             }
         );
     } else {
         PostModel.find().skip(options.offset).limit(options.limit).sort(options.orderDirection+''+options.orderBy).exec(
-            function (err, response) {
+            function (err, doc) {
                 if (err) {
                     return next(err);
                 }
-                return res.json(response);
+                return res.json(doc);
             }
         );
     }
 };
 
-module.exports.show = function (req, res) {
-    PostModel.findById(req.params.id, function (err, response) {
+module.exports.show = function (req, res, next, resourceId) {
+    PostModel.findById(resourceId, function (err, doc) {
         if (err) {
             return next(err);
         }
-        if (!response) {
+        if (!doc) {
             return res.status(404).json({message: "No resource with that ID found in the database."});
         }
-        return res.json(response);
+        return res.json(doc);
     });
 };
 
@@ -53,9 +55,9 @@ module.exports.count = function (req, res) {
 
 module.exports.create = function (req, res, next) {
     delete req.body['_id'];
-    var postData = req.body;
+    var resourceData = req.body;
 
-    if (postData['title'] === undefined){
+    if (resourceData['title'] === undefined){
         return res.status(400).json({message: "Not enough data to create a a resource. Note: title is required."});
     }
 
@@ -66,70 +68,92 @@ module.exports.create = function (req, res, next) {
             return res.status(404).json({message: "No resource with that ID found in the database."});
         }
 
-        postData._id = sequence.sequence_value;
-        /* fix next line, check for errors, use config file location */
-        fs.mkdirSync('./files/img/posts/' + postData._id);
-        if (postData['mainImgBase64']) {
-            var imageBuffer = Base64.decodeBase64Image(req.body['mainImgBase64']);
-            delete postData['mainImgBase64'];
-            fsUpload.upload('/img/post/' + postData._id + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (res, err) {
-                if (err) {
-                    return next(err);
-                } else if (res) {
-                    postData.main_img = 'main.' + imageBuffer.type;
-                }
-            });
-        }
+        resourceData._id = sequence.sequence_value;
 
-        var newPost = new PostModel(userData);
-        newPost.save(function (err) {
+        fsUpload.mkdir('/img/posts/' + resourceData._id + "/").then(function(directory, err){
             if (err) {
                 return next(err);
+            } else if (directory) {
+                if (resourceData['mainImgBase64']) {
+                    var imageBuffer = Base64.decodeBase64Image(req.body['mainImgBase64']);
+                    delete resourceData['mainImgBase64'];
+                    fsUpload.upload('/img/posts/' + resourceData._id + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (file, err) {
+                        if (err) {
+                            return next(err);
+                        } else if (file) {
+                            resourceData.mainImg = 'main.' + imageBuffer.type;
+                            var newPost = new PostModel(resourceData);
+
+                            newPost.save(function (err) {
+                                if (err) {
+                                    return next(err);
+                                }
+                                return res.json(newPost);
+                            });
+                        }
+                    });
+                } else {
+                    var newPost = new PostModel(resourceData);
+
+                    newPost.save(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        return res.json(newPost);
+                    });
+                }
             }
-            return res.json(newPost);
         });
     });
 };
 
-module.exports.update = function (req, res, next) {
-    var postData = req.body;
-    delete postData['_id'];
+module.exports.update = function (req, res, next, resourceId) {
+    var resourceData = req.body;
+    delete resourceData['_id'];
+    delete resourceData['images'];
 
-    if (postData['mainImgBase64']) {
-        var imageBuffer = Base64.decodeBase64Image(req.body['mainImgBase64']);
-        delete postData['mainImgBase64'];
-        fsUpload.upload('/img/post/' + postData._id + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (res, err) {
+    if (resourceData['mainImgBase64']) {
+        var imageBuffer = Base64.decodeBase64Image(resourceData['mainImgBase64']);
+        delete resourceData['mainImgBase64'];
+        fsUpload.upload('/img/posts/' + resourceId + '/' + 'main.' + imageBuffer.type, imageBuffer.data).then(function (file, err) {
             if (err) {
                 return next(err);
-            } else if (res) {
-                postData.main_img = 'main.' + imageBuffer.type;
+            } else if (file) {
+                resourceData.mainImg = 'main.' + imageBuffer.type;
+                PostModel.findByIdAndUpdate(resourceId, resourceData, function (err, doc) {
+                    if (err) {
+                        return next(err);
+                    }
+                    res.json(doc);
+                });
             }
+        });
+    } else {
+        PostModel.findByIdAndUpdate(resourceId, resourceData, function (err, doc) {
+            if (err) {
+                return next(err);
+            }
+            res.json(doc);
         });
     }
-
-    PostModel.findByIdAndUpdate(req.params.id, postData, function (err, response) {
-        if (err) {
-            return next(err);
-        }
-        res.json(response);
-    });
 };
 
-module.exports.addImage = function (req, res, next) {
+module.exports.addImage = function (req, res, next, resourceId) {
     var imageBuffer;
-    if (req.body.imgDataBase64 !== undefined) {
-        imageBuffer = Base64.decodeBase64Image(req.body.img_data);
+    if (req.body.imgDataBase64) {
+        imageBuffer = Base64.decodeBase64Image(req.body.imgDataBase64);
         var rand_name = new Date().getUTCMilliseconds() + "" + Math.floor((Math.random() * 1e6) + 1) + '.' + imageBuffer.type;
 
-        fsUpload.upload('/img/posts/' + req.params.id + "/" + rand_name, imageBuffer.data).then(function (res, err) {
+        fsUpload.upload('/img/posts/' + resourceId + "/" + rand_name, imageBuffer.data).then(function (fileName, err) {
             if (err) {
                 return next(err);
-            } else if (res) {
-                PostModel.findByIdAndUpdate(req.params.id,{$push: {"images": rand_name}}, {'new': true}, function (err, response) {
+            } else if (fileName) {
+                PostModel.findByIdAndUpdate(resourceId,{$push: {"images": rand_name}}, {'new': true}, function (err, response) {
                     if (err) {
                         return next(err);
                     }
                     if (response) {
+                        console.log(response);
                         return res.json(response);
                     }
                 });
@@ -138,14 +162,14 @@ module.exports.addImage = function (req, res, next) {
     }
 };
 
-module.exports.removeImage = function (req, res, next) {
-    PostModel.findByIdAndUpdate(req.params.id,{$pull: {"images": req.params.image_name}}, {'new': true}, function (err, doc) {
+module.exports.removeImage = function (req, res, next, resourceId) {
+    PostModel.findByIdAndUpdate(resourceId,{$pull: {"images": req.params.image_name}}, {'new': true}, function (err, doc) {
         if (err) {
             return next(err);
         }
         try {
-            fs.unlink('./files/img/posts/' + req.params.id + "/" + req.params.image_name);
-            res.json({message: "Deleted image for post: " + req.params.id + " with a unique filename: " + req.params.image_name + "."});
+            fs.unlink('../files/img/posts/' + resourceId + "/" + req.params.image_name);
+            res.json({message: "Deleted image for post: " + resourceId + " with a unique filename: " + req.params.image_name + "."});
         }
         catch (err) {
             return next(err);
@@ -153,14 +177,14 @@ module.exports.removeImage = function (req, res, next) {
     });
 };
 
-module.exports.remove = function (req, res, next) {
-    PostModel.findByIdAndRemove(req.params.id, function (err, response) {
+module.exports.remove = function (req, res, next, resourceId) {
+    PostModel.findByIdAndRemove(resourceId, function (err, doc) {
         if (err) {
             return next(err);
         }
         else {
-            res.json({message: "Post with id " + req.params.id + " removed."});
-            rimraf('./files/img/posts/' + req.params.id + "/", function () {
+            res.json({message: "Post with id " + resourceId + " removed."});
+            rimraf('../files/img/posts/' + resourceId + "/", function () {
             });
         }
     });

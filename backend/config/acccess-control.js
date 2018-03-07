@@ -1,5 +1,3 @@
-
-
 module.exports = {
     setHeader: function (req, res, next) {
         // Website you wish to allow to connect

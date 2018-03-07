@@ -3,7 +3,7 @@ module.exports.decodeBase64Image = function (dataString) {
         response = {};
 
     if (matches.length !== 3) {
-        return new Error('Invalid input string');
+        return new Error('Invalid input string, must base Base64 format.');
     }
 
     response.type = matches[1].split('/')[1];

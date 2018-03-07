@@ -14,12 +14,14 @@ app.use(accessControl.setHeader);
 var errorHandling = require('./config/error-handling.js');
 if (app.get('env') === 'development') {
     app.use(errorHandling.errorHandlingDev);
-   /* process.on('uncaughtException', function (err) {
-        console.log('\r\nUncaught exception:\r\n ' + err);
-    });*/
 } else {
     app.use(errorHandling.errorHandlingProd);
 }
+
+process.on('uncaughtException', function (err) {
+    console.log('\r\nUncaught exception:\r\n ' + err);
+    process.exit(1);
+});
 
 // api routes definitions
 var routes = require('./routes.js');
