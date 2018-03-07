@@ -250,7 +250,7 @@ mat-sidenav {
   height: calc(100vh - 64px);
 }
 .intrev-content {
- padding: 0 0 80px 0;
+ padding: 40px 0 80px 0;
 }
 
 .intrev-content  mat-card {
@@ -266,4 +266,27 @@ mat-sidenav {
   margin-right: -24px;
   width: calc(100% + 8px);
   padding: 20px;
+}
+#view-source {
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  z-index: 900;
+}
+
+.disabled {
+  color: #D3D3D3;
+}
+
+canvas {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+body {
+  background: #80808021;
 }

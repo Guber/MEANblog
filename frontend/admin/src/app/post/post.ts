@@ -3,11 +3,12 @@ export class Post {
   title: String;
   summary: String;
   body: String;
-  main_img: String;
+  mainImg: String;
   images: Array<String>;
   tags: Array<String>;
-  author: String;
-  author_id: number;
-  category_id: number;
-  created: Date;
+  authorId: number;
+  categoryId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  hidden: Boolean;
 }

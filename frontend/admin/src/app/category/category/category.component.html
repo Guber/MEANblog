@@ -4,6 +4,11 @@
 <mat-card *ngIf="category" style="margin-top: 40px;">
   <mat-card-title class="intrev-card-title">Category #{{category._id}}
     <mat-card-subtitle><span class="task">{{task}}</span>ing post resource.</mat-card-subtitle>
+    <mat-slide-toggle
+      class="example-margin"
+      [(ngModel)] ="category.hidden"
+    > Hidden
+    </mat-slide-toggle>
   </mat-card-title>
 
   <div>

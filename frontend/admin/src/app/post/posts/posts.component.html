@@ -1,5 +1,4 @@
-
-<mat-card style="margin-top: 40px;">
+<mat-card>
   <mat-card-title class="intrev-card-title" >Posts in the database
     <mat-card-subtitle >Listed out.</mat-card-subtitle>
   </mat-card-title>
@@ -20,13 +19,13 @@
     &lt;!&ndash; Created &ndash;&gt;
     <ng-container matColumnDef="created">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Created</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.created | date}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.createdAt | date}}</mat-cell>
     </ng-container>
 
     &lt;!&ndash; Author &ndash;&gt;
     <ng-container matColumnDef="author">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Author</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.author}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.authorId}}</mat-cell>
     </ng-container>
 
     &lt;!&ndash; Title &ndash;&gt;
@@ -39,7 +38,7 @@
     <ng-container matColumnDef="thumbnail">
       <mat-header-cell *matHeaderCellDef> Thumnbail</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <img [src]="row.main_img" (error)="setPostImgToDefault(row)" height="50">
+        <img [src]="row.mainImg" (error)="setPostImgToDefault(row)" height="50">
       </mat-cell>
     </ng-container>
 

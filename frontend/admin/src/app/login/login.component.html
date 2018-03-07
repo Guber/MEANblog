@@ -1,13 +1,13 @@
 <div class="outer-login-container">
   <div class="inner-login-container">
-    <mat-card class="login-card" style="text-align: left;">
-      <img src="assets/img/big-logo.png" style="height: 30px; margin-bottom: 15px;">
-      <mat-card-title >
-      Sign in
+    <mat-card class="login-card">
+      <img src="assets/img/big-logo.png">
+      <mat-card-title>
+        Sign in
       </mat-card-title>
       <mat-card-subtitle>to use Int-rev administration panel.</mat-card-subtitle>
-      <form (keyup.enter)="submitLogIn()" style="margin-top: 40px;">
-        <mat-card-content style="margin-top: 40px;">
+      <form (keyup.enter)="submitLogIn()">
+        <mat-card-content>
           <mat-form-field>
             <input matInput placeholder="Username" [(ngModel)]="name" [formControl]="usernameFormControl">
             <mat-error *ngIf="usernameFormControl.hasError('required')">
@@ -29,10 +29,11 @@
               Password is <strong>incorrect</strong>.
             </mat-error>
           </mat-form-field>
-
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="submitLogIn()" [disabled]="!this.name || !this.password">LOG IN</button>
+          <button mat-raised-button color="primary" (click)="submitLogIn()" [disabled]="!this.name || !this.password">
+            LOG IN
+          </button>
         </mat-card-actions>
       </form>
     </mat-card>

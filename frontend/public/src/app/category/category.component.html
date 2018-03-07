@@ -2,7 +2,7 @@
 <!-- Set your background image for this header on the line below. -->
 <div *ngIf="category">
   <header class="intro-header"
-          [style.background-image]="'url(assets/img/categories/' + category._id + '/' +  category.main_img + ')'">
+          [style.background-image]="'url('+  dataUrl + +'/img/categories/'+ category._id + '/' +  category.mainImg + ')'">
 
     <div class="container">
       <div class="row">

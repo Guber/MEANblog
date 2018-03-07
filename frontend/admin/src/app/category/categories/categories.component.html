@@ -1,25 +1,25 @@
+<!--<mat-card [routerLink]="['/categories/add']" class="add-card">
+  <img mat-card-image [src]="'/assets/img/plus-image.jpg'">
+</mat-card>-->
+<div class="add-button-container">
+  <button mat-fab color="primary" [routerLink]="['/categories/add']" class="add-button">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 
-<div style="margin-top: 40px;">
-  <mat-card [routerLink]="['/categories/add']"
-    style="width: 250px; display: inline-block; margin-left: 20px; padding-bottom: 0;top: 0; ">
-      <img mat-card-image [src]="'/assets/img/plus-image.jpg'"
-           style="height: 300px; object-fit: cover;">
-  </mat-card>
-  <mat-card *ngFor="let category of categories" style="width: 300px; display: inline-block; margin-left: 20px;">
-    <mat-card-content>
-      <img mat-card-image [src]="category.main_img"  (error)="setCategoryImgToDefault(category)"
-      style="height: 200px; object-fit: cover;">
-      <p style="font-size: 18px;
+<mat-card *ngFor="let category of categories" class="category-card">
+  <mat-card-content>
+    <img mat-card-image [src]="category.mainImg" (error)="setCategoryImgToDefault(category)"
+         style="height: 200px; object-fit: cover;">
+    <p style="font-size: 18px;
     font-weight: bold;
     margin: 0;">{{category.name}}</p>
-      <p>{{category.description}}</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>Posts</button>
-      <button mat-button [routerLink]="['/categories/edit/' + category._id]">Edit</button>
-      <button mat-button>Delete</button>
-    </mat-card-actions>
-  </mat-card>
-
-</div>
+    <p>{{category.description}}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button disabled>Posts</button>
+    <button mat-button [routerLink]="['/categories/edit/' + category._id]">Edit</button>
+    <button mat-button (click)="deleteCategory(category._id)">Delete</button>
+  </mat-card-actions>
+</mat-card>
 

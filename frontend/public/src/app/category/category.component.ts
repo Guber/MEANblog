@@ -3,6 +3,7 @@ import { CategoriesService } from '../categories.service';
 import { ActivatedRoute } from '@angular/router';
 import { Category } from '../category';
 import { Post } from '../post';
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-category',
@@ -14,7 +15,7 @@ export class CategoryComponent implements OnInit {
 
   posts: Post[] = [];
   category: Category;
-
+  dataUrl = environment.dataUrl;
   constructor(private categoriesService: CategoriesService, private route: ActivatedRoute) {  }
 
   ngOnInit() {

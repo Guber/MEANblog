@@ -18,7 +18,7 @@ export class CategoryComponent implements OnInit {
   category: Category;
   file: File;
   categoryImgUrl: String;
-  private main_img_base64: string;
+  private mainImgBase64: string;
   private defaultCategoryImgUrl: String = '/assets/img/image.png';
   private dataUrl = environment.dataUrl;
 
@@ -41,7 +41,7 @@ export class CategoryComponent implements OnInit {
   fetchPostData(category_id) {
     this.categoriesService.getCategory(category_id).subscribe(category => {
       this.category = category;
-      this.categoryImgUrl = this.dataUrl + '/img/categories/' + category._id + '/' + category.main_img;
+      this.categoryImgUrl = this.dataUrl + '/img/categories/' + category._id + '/' + category.mainImg;
     });
   }
 
@@ -53,7 +53,7 @@ export class CategoryComponent implements OnInit {
     reader.onload = (e) => {
       const target: any = e.target;
       this.categoryImgUrl = target.result;
-      this.main_img_base64 = target.result;
+      this.mainImgBase64 = target.result;
     };
     reader.readAsDataURL(this.file);
   }
@@ -63,7 +63,7 @@ export class CategoryComponent implements OnInit {
   }
 
   saveCategory() {
-    this.category['main_img_data'] = this.main_img_base64;
+    this.category['mainImgBase64'] = this.mainImgBase64;
 
     if (this.task === 'edit') {
       this.categoriesService.postExisting(this.category._id, this.category).subscribe(res => {
@@ -78,7 +78,7 @@ export class CategoryComponent implements OnInit {
       this.categoriesService.postNew(this.category).subscribe(res => {
         this.category_id = res._id;
         this.snackBar.open('Successfully added the category.', '', {duration: 2000,});
-        this.router.navigate(['post/edit/' + this.category_id]);
+        this.router.navigate(['categories/edit/' + this.category_id]);
       }, error => this.snackBar.open(error, '', {duration: 2000,}));
     }
   }

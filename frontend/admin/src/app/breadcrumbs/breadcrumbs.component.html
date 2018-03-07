@@ -1,6 +1,12 @@
-<span *ngFor="let breadcrumb of breadcrumbs; let last = last">
+<span class="desktop-breadcrumb" *ngFor="let breadcrumb of breadcrumbs; let last = last">
   <button mat-button [routerLink]="['/'+breadcrumb.address]" [disabled]="last">
     <p class="header-breadcrumb">{{breadcrumb.displayText}}</p>
   </button>
-  <mat-icon style=" display: inline-block;vertical-align: middle;" *ngIf="!last">chevron_right</mat-icon>
+  <mat-icon class="breadcrumb-chevron" *ngIf="!last">chevron_right</mat-icon>
 </span>
+<span>
+
+</span>
+<button class="mobile-breadcrumb" mat-icon-button onclick="window.history.go(-1)">
+  <mat-icon class="breadcrumb-chevron">chevron_left</mat-icon>
+</button>

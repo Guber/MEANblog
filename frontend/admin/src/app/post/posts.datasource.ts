@@ -55,7 +55,7 @@ export class PostsDataSource extends DataSource<Post> {
     this.postsService.getAllPosts(this._paginator.pageSize, offset, this._sort.active, this._sort.direction, this._filter).subscribe(posts => {
 
       posts.forEach((post) => {
-       post.main_img = this.dataUrl + '/img/posts/' + post._id + '/' + post.main_img;
+       post.mainImg = this.dataUrl + '/img/posts/' + post._id + '/' + post.mainImg;
       });
 
       this.data.next(posts);

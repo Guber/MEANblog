@@ -29,14 +29,31 @@ export class CategoriesComponent implements OnInit {
         this.categories = categories;
 
         this.categories.forEach((category) => {
-          category.main_img = this.dataUrl + '/img/categories/' + category._id + '/' + category.main_img;;
+          category.mainImg = this.dataUrl + '/img/categories/' + category._id + '/' + category.mainImg;
         });
       });
     });
   }
 
   setCategoryImgToDefault(category) {
-    category.main_img = this.defaultCategoryImgUrl;
+    category.mainImg = this.defaultCategoryImgUrl;
   }
 
+  deleteCategory(categoryId) {
+    if (confirm('You sure you want to delete this category?')) {
+      this.categoriesService.deleteCategory(categoryId).subscribe(complete => {
+        this.fetchData();
+      });
+    }
+  }
+
+  fetchData() {
+    this.categoriesService.getAllCategories().subscribe(categories => {
+      this.categories = categories;
+
+      this.categories.forEach((category) => {
+        category.mainImg = this.dataUrl + '/img/categories/' + category._id + '/' + category.mainImg;
+      });
+    });
+  }
 }

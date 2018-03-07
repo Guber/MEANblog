@@ -49,6 +49,6 @@ export class PostsComponent implements OnInit {
   }
 
   setPostImgToDefault(post) {
-    post.main_img = this.defaultPostImgUrl;
+    post.mainImg = this.defaultPostImgUrl;
   }
 }

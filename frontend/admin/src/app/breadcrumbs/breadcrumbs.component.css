@@ -1,0 +1,30 @@
+.breadcrumb-chevron {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .desktop-breadcrumb {
+    display: none;
+  }
+
+  .mobile-breadcrumb {
+    display: initial;
+  }
+
+}
+
+@media only screen and (min-width: 769px) {
+  /* For mobile phones: */
+  .desktop-breadcrumb {
+    display: initial;
+  }
+
+  .mobile-breadcrumb {
+    display: none;
+  }
+
+}
+
+

@@ -5,15 +5,21 @@
 <mat-card *ngIf="post" style="margin-top: 40px;">
   <mat-card-title class="intrev-card-title">Post #{{post._id}}
     <mat-card-subtitle><span class="task">{{task}}</span>ing post resource.</mat-card-subtitle>
+    <mat-slide-toggle
+      class="example-margin"
+      [(ngModel)] ="post.hidden"
+    > Hidden
+    </mat-slide-toggle>
   </mat-card-title>
 
   <div>
     <mat-form-field style="width: 100%;">
       <input matInput placeholder="Title" [(ngModel)]="post.title">
     </mat-form-field>
+
     <mat-form-field style="width: 100%;" *ngIf="categories">
       <mat-select placeholder="Category" matInput [formControl]="categoryControl" placeholder="Category"
-                  [(ngModel)]="post.category_id">
+                  [(ngModel)]="post.categoryId">
         <mat-option *ngFor="let category of categories" [value]="category._id">
           {{category.name}}
         </mat-option>

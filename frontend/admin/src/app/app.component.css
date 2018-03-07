@@ -1,17 +1,17 @@
-.color-1{
-  color: rgb(96,125,139)
+.color-1 {
+  color: rgb(96, 125, 139)
 }
 
-.color-1-bck{
+.color-1-bck {
   background-color: #4285f4;
 }
 
-.color-2-bck{
+.color-2-bck {
   background-color: rgb(255, 255, 255) !important;
 }
 
 .sidebar-link {
-display: block;
+  display: block;
   width: 240px;
   padding: 14px 40px;
   color: #535353;
@@ -25,10 +25,12 @@ display: block;
 }
 
 .header-breadcrumb {
-  display:inline-block;
+  display: inline-block;
 }
 
-.header-breadcrumb:first-letter {text-transform: uppercase}
+.header-breadcrumb:first-letter {
+  text-transform: uppercase
+}
 
 .task {
   display: inline-block;
@@ -38,3 +40,23 @@ display: block;
   text-transform: uppercase;
 }
 
+.header-title {
+  margin-left: 30px;
+  padding-right: 15px;
+  margin-right: 15px;
+  border-right: 1px solid #d7d7d7;
+}
+
+.header-menu {
+  position: absolute;
+  right: 30px;
+}
+
+.sidebar-link mat-icon {
+  margin-right: 32px
+}
+
+.sidebar-link span {
+  position: absolute;
+  line-height: 24px;
+}

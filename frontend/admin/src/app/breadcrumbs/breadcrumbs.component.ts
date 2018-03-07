@@ -56,6 +56,12 @@ export class BreadcrumbsComponent implements OnInit {
         } else if (currentUrl.indexOf('post/edit/') !== -1) {
           this.breadcrumbs.push(new Breadcrumb('Posts', '/posts'));
           this.breadcrumbs.push(new Breadcrumb('Edit post ' + currentUrl.replace('/post/edit/', ''), currentUrl));
+        } else if (currentUrl.indexOf('categories/edit/') !== -1) {
+          this.breadcrumbs.push(new Breadcrumb('Categories', '/categories'));
+          this.breadcrumbs.push(new Breadcrumb('Edit category ' + currentUrl.replace('/categories/edit/', ''), currentUrl));
+        } else if (currentUrl.indexOf('users/edit/') !== -1) {
+          this.breadcrumbs.push(new Breadcrumb('Users', '/users'));
+          this.breadcrumbs.push(new Breadcrumb('Edit user ' + currentUrl.replace('/users/edit/', ''), currentUrl));
         }
       }
     }

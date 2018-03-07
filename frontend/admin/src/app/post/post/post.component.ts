@@ -34,8 +34,9 @@ export class PostComponent implements OnInit {
   newImages: any = [];
   tagInput = '';
   private postImgUrl: String;
-  private main_img_base64: string;
+  private mainImgBase64: string;
   private defaultPostImgUrl: String = '/assets/img/image.png';
+  private fetchLock = false;
 
   constructor(private postsService: PostsService, private usersService: UsersService, private categoryService: CategoriesService,
               private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {
@@ -77,7 +78,7 @@ export class PostComponent implements OnInit {
         images_upload_credentials: true
       });
 
-    }, 0);
+    }, 1000);
   }
 
   ngOnDestroy() {
@@ -101,7 +102,7 @@ export class PostComponent implements OnInit {
       }
     });
 
-    this.post['main_img_data'] = this.main_img_base64;
+    this.post['mainImgBase64'] = this.mainImgBase64;
 
     if (this.task === 'edit') {
       this.postsService.postExisting(this.post._id, this.post).subscribe(res => {
@@ -115,22 +116,22 @@ export class PostComponent implements OnInit {
       }
 
       this.postsService.postNew(this.post).subscribe(res => {
-        this.post_id = res.id;
+        this.post_id = res._id;
         this.saveImages();
         this.snackBar.open('Successfully added the post.', '', {duration: 2000, });
         this.router.navigate(['post/edit/' + this.post_id]);
       }, error => this.snackBar.open(error, '', {duration: 2000, }));
     }
+
   }
 
   saveImages() {
-    let data = new FormData();
-
     this.newImages.forEach((img) => {
       if (img.addFlag) {
-        data = new FormData();
-        data.append('img_data', img.value);
+        const data = {};
+        data['imgDataBase64'] = img.value;
         self.postsService.postPostImage(self.post_id, data).subscribe(posts => {
+          this.fetchPostData(this.post_id);
         }, error => alert(error));
       }
     });
@@ -138,29 +139,34 @@ export class PostComponent implements OnInit {
     this.oldImages.forEach((img) => {
       if (!img.addFlag) {
         self.postsService.deletePostImage(self.post_id, img.value).subscribe(posts => {
+          this.fetchPostData(this.post_id);
         }, error => alert(error));
       }
     });
+
+    this.newImages = [];
   }
 
   fetchPostData(post_id) {
-    this.tags = [];
-    this.oldImages = [];
-    this.newImages = [];
     this.postsService.getPost(post_id).subscribe(post => {
       this.post = post;
-      this.postImgUrl = post.main_img = this.dataUrl + '/img/posts/' + post._id + '/' + post.main_img;
+      this.postImgUrl = this.dataUrl + '/img/posts/' + post._id + '/' + post.mainImg;
       this.postUrl = environment.apiUrl + 'posts/' + post._id;
-
+      this.tags = [];
       post.tags.forEach((el) => {
         const tag = {value: el, remove: false};
         this.tags.push(tag);
       });
 
+      this.oldImages = [];
+
+      let _oldImages = [];
       post.images.forEach((el) => {
         const image = {value: el, addFlag: true};
-        this.oldImages.push(image);
+        _oldImages.push(image);
       });
+
+      this.oldImages = _oldImages;
 
       this.usersService.getUser(self.post.author_id).subscribe(user => {
         this.author = user;
@@ -181,7 +187,7 @@ export class PostComponent implements OnInit {
       const target: any = e.target;
       if (mainImg) {
         this.postImgUrl = target.result;
-        this.main_img_base64 = target.result;
+        this.mainImgBase64 = target.result;
       } else {
         this.newImages.push({value: reader.result, addFlag: true});
       }

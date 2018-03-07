@@ -1,0 +1,36 @@
+.add-card {
+  width: 150px;
+  display: inline-block;
+  margin-left: 20px;
+  padding-bottom: 0;
+  top: 0;
+  overflow: hidden;
+}
+
+.add-card img:hover {
+  transform: scale(1.25);
+}
+
+.add-card img {
+  height: 150px;
+  object-fit: cover;
+  transition: transform .2s;
+}
+
+.category-card {
+  width: 300px;
+  display: inline-block;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.add-button-container {
+  display: inline-block;
+  width: 100px;
+}
+
+.add-button {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+}

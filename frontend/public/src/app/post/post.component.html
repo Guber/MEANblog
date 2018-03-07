@@ -2,7 +2,7 @@
 <!-- Set your background image for this header on the line below. -->
 <div *ngIf="post">
   <header class="intro-header"
-          [style.background-image]="'url(' +  dataUrl +'/img/posts/' + post._id + '/' +  post.main_img + ')'">
+          [style.background-image]="'url(' +  dataUrl +'/img/posts/' + post._id + '/' +  post.mainImg + ')'">
 
     <div class="container">
       <div class="row">
@@ -10,7 +10,7 @@
           <div class="post-heading">
             <h1>{{post.title}}</h1>
             <h2 class="subheading">{{post.summary}}</h2>
-            <span class="meta">Posted by <a href="#">{{post.author}}</a> on {{post.created | date}}   </span>
+            <span class="meta">Posted <span *ngIf="author">by {{author.firstName}}  {{author.lastName}}</span> <a href="#">{{post.author}}</a> on {{post.createdAt | date}}   </span>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
         <div *ngIf = "author">
           <div class="col-lg-2 col-md-2">
             <h4>Author:</h4>
-            <a  [routerLink]="['/user', author._id]">{{post.author}}</a>
+            <a  [routerLink]="['/user', post.authorId]">{{author.firstName}}  {{author.lastName}}</a>
           </div>
         </div>
         <div *ngIf = "posts.length > 0">
@@ -45,7 +45,7 @@
             *ngFor="let post of posts" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{post.title}}</a></div>
           </div>
         </div>
-        <div *ngIf = "post">
+        <div *ngIf = "category">
           <div class="col-lg-2 col-md-2">
             <h4>Category:</h4>
             <a  [routerLink]="['/category', category._id]">{{category.name}}</a>
