@@ -1,27 +1,29 @@
 var fsUpload = require('../helpers/fs/fs-upload.js');
+var config = require('../config.js');
+var mongoose = require('mongoose');
+
 console.log("Install script initiated:");
 console.log("\\r\\n##################################################\"");
 console.log("Step 1/x: Creating folders...");
-fsUpload.mkdir('../../../files').then(function () {
-    fsUpload.mkdir('../../../files/posts');
+fsUpload.mkdir('../../' + config.uploadData.fsLocation).then(function () {
+    fsUpload.mkdir('../'+ config.uploadData.fsLocation + '/posts');
 }).then(function () {
-    fsUpload.mkdir('../../../files/categories');
+    fsUpload.mkdir('../../'+ config.uploadData.fsLocation + '/categories');
 }).then(function () {
-    fsUpload.mkdir('../../../files/users');
+    fsUpload.mkdir('../../'+ config.uploadData.fsLocation + '/users');
+}).then(function () {
+    mongoose.connect('mongodb://' + config.database.dbServer + '/' + config.database.dbName);
 }).catch(function (err) {
         console.log("Error : " + err + "\r\n");
     }
 );
+console.log("\\r\\n##################################################\"");
 console.log("\r\nStep 2/x: Initializing the database...");
-
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1/MeanBlog');
 
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {
-    console.log('Mongoose default connection open to ' + 'mongodb://127.0.0.1:27017/sms-dev');
-
+    // console.log('Mongoose default connection open to ' + 'mongodb://' + config.database.dbServer + '/' + config.database.dbName);
     mongoose.connection.db.createCollection('users');
     mongoose.connection.db.createCollection('posts');
     mongoose.connection.db.createCollection('categories');
@@ -42,6 +44,8 @@ mongoose.connection.on('connected', function () {
                     console.log("Error : " + err + "\r\n");
                 }
                 mongoose.connection.close(function () {
+                    console.log("\\r\\n##################################################\"");
+                    console.log("All done. :)");
                 });
             });
         });
@@ -50,25 +54,19 @@ mongoose.connection.on('connected', function () {
 
 // If the connection throws an error
 mongoose.connection.on('error', function (err) {
-    console.log('Mongoose default connection error: ' + err);
+   console.log('Mongoose default connection error: ' + err);
 });
 
 // When the connection is disconnected
 mongoose.connection.on('disconnected', function () {
-    console.log('Mongoose default connection disconnected');
+    // console.log('Mongoose default connection disconnected');
 });
 
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', function () {
     mongoose.connection.close(function () {
-        console.log('Mongoose default connection disconnected through app termination');
+        // console.log('Mongoose default connection disconnected through app termination');
         process.exit(0);
     });
 });
-
-console.log("\\r\\n##################################################\"");
-console.log("Step 3/x: Installing npm packages...");
-
-var exec = require('child_process').exec;
-child = exec('cd .. & npm install').stderr.pipe(process.stderr);
 

@@ -1,4 +1,5 @@
 
+
 # MEANblog  
 **Blog CMS** built using **MongoDB-Express-Angular-Node.js** technologies. 
 
@@ -26,3 +27,35 @@ Separated into three modules:
  - Post comments and likes (with social login).
  - Notifications in admin panel.
  - Turning *SPAs* to *Progressive Web APPs*.
+ 
+## How to install and run
+
+### Requirements
+
+- MongoDB database
+- NodeJS
+
+### Installing
+- if needed change hardcoded data in *module.exports.dbServer* and *module.exports.dbName* located in *config/database.js* script
+- make sure Mongo database service is running by running *mongod* command
+- install backend npm packages by positioning yourself in */backend* folder and running:
+ ``` npm install ```
+- finish backend installation procedure by running:
+``` node backend/cli/install.js ```
+- install backend npm packages by positioning yourself in */frontend/admin* folder and running:
+ ``` npm install ```
+ - install backend npm packages by positioning yourself in */frontend/public* folder and running:
+ ``` npm install ```
+ 
+### Running
+
+- make sure Mongo database service is running
+- to run backend REST API position yourself in backend folder and run:
+ ``` node server.js ```
+ 
+- to run frontend Admin SPA position yourself in frontend/admin and run:
+```ng serve --port 4201 --open```
+
+- to run frontend Public spa position yourself in frontend/public and run:
+ ```ng serve --port 4202 --open```
+
