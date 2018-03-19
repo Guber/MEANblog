@@ -1,4 +1,4 @@
- <!-- Page Header -->
+<!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
 <div *ngIf="post">
   <header class="intro-header"
@@ -10,7 +10,8 @@
           <div class="post-heading">
             <h1>{{post.title}}</h1>
             <h2 class="subheading">{{post.summary}}</h2>
-            <span class="meta">Posted <span *ngIf="author">by {{author.firstName}}  {{author.lastName}}</span> <a href="#">{{post.author}}</a> on {{post.createdAt | date}}   </span>
+            <span class="meta">Posted <span *ngIf="author">by {{author.firstName}}  {{author.lastName}}</span> <a
+              href="#">{{post.author}}</a> on {{post.createdAt | date}}   </span>
           </div>
         </div>
       </div>
@@ -24,7 +25,7 @@
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1">
           <p [innerHTML]="post.body"></p>
           <hr>
-          <div *ngIf = "post.images.length > 0">
+          <div *ngIf="post.images.length > 0">
             <h3>Gallery</h3>
             <div style=" padding:20px  20px 20px 0; display: inline-block;" *ngFor="let image of post.images">
               <img class="gallery" [src]=" dataUrl +'/img/posts/' + post._id + '/' + image"
@@ -32,48 +33,46 @@
             </div>
           </div>
         </div>
-        <div *ngIf = "author">
+        <div *ngIf="author">
           <div class="col-lg-2 col-md-2">
             <h4>Author:</h4>
-            <a  [routerLink]="['/user', post.authorId]">{{author.firstName}}  {{author.lastName}}</a>
+            <a [routerLink]="['/user', post.authorId]">{{author.firstName}} {{author.lastName}}</a>
           </div>
         </div>
-        <div *ngIf = "posts.length > 0">
+        <div *ngIf="posts.length > 0">
           <div class="col-lg-2 col-md-2">
             <h4>More from same author:</h4>
-            <div><a [routerLink]="['/post', post._id]"
-            *ngFor="let post of posts" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{post.title}}</a></div>
+            <div *ngFor="let post of posts"><a [routerLink]="['/post', post._id]"
+                                               style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{post.title}}</a>
+            </div>
           </div>
         </div>
-        <div *ngIf = "category">
+        <div *ngIf="category">
           <div class="col-lg-2 col-md-2">
             <h4>Category:</h4>
-            <a  [routerLink]="['/category', category._id]">{{category.name}}</a>
+            <a [routerLink]="['/category', category._id]">{{category.name}}</a>
           </div>
         </div>
-          <div *ngIf = "post.tags.length > 0">
-            <div class="col-lg-2 col-md-2">
-              <h4>Taggs:</h4>
-              <div><span class="chip" *ngFor="let tag of post.tags">{{tag}}</span></div>
-            </div>
+        <div *ngIf="post.tags.length > 0">
+          <div class="col-lg-2 col-md-2">
+            <h4>Taggs:</h4>
+            <div><span class="chip" *ngFor="let tag of post.tags">{{tag}}</span></div>
           </div>
+        </div>
 
-          <div id="myModal" class="modal" style="display: block;" *ngIf="galleryModalDisplay">
-            <div style="position: fixed; top: 0; left:0; height: 100vh; width: 100vw; z-index: -1;"
-                 (click)="galleryModalDisplay = false;"></div>
-            <!-- The Close Button -->
-            <span class="close" (click)="galleryModalDisplay = false;">&times;</span>
+        <div id="myModal" class="modal" style="display: block;" *ngIf="galleryModalDisplay">
+          <div style="position: fixed; top: 0; left:0; height: 100vh; width: 100vw; z-index: -1;"
+               (click)="galleryModalDisplay = false;"></div>
+          <!-- The Close Button -->
+          <span class="close" (click)="galleryModalDisplay = false;">&times;</span>
 
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" [src]="galleryModalImg">
-            <div style=" padding:20px  20px 20px 0; display: inline-block;" *ngFor="let image of post.images">
-              <img class="gallery" [src]=" dataUrl +'/img/posts/' + post._id + '/' + image"
-                   (click)="setGalleryImage(dataUrl + '/img/posts/' + post._id + '/' + image)" height="100">
-            </div>
+          <!-- Modal Content (The Image) -->
+          <img class="modal-content" [src]="galleryModalImg">
+          <div style=" padding:20px  20px 20px 0; display: inline-block;" *ngFor="let image of post.images">
+            <img class="gallery" [src]=" dataUrl +'/img/posts/' + post._id + '/' + image"
+                 (click)="setGalleryImage(dataUrl + '/img/posts/' + post._id + '/' + image)" height="100">
           </div>
-
-
-
+        </div>
       </div>
     </div>
   </article>
