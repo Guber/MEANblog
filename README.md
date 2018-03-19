@@ -51,7 +51,7 @@ Separated into three modules:
 
 - make sure Mongo database service is running
 - to run backend REST API position yourself in backend folder and run:
- ``` node server.js ```
+ ``` nodemon server.js ```
  
 - to run frontend Admin SPA position yourself in frontend/admin and run:
 ```ng serve --port 4201 --open```
