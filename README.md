@@ -59,3 +59,10 @@ Separated into three modules:
 - to run frontend Public spa position yourself in frontend/public and run:
  ```ng serve --port 4202 --open```
 
+## Sample images
+Sample image of administration panel:
+[![Sample image of administration panel](https://int-rev.com/demo/blog/editing_post.jpg)](https://drive.google.com/file/d/14ailj0VJkUzW362K4AgQJ9PF8c-ZGEIU/view?usp=sharing "Google docs link")
+
+
+Sample image of public frontend:
+[![Sample image of public frontend](https://int-rev.com/demo/blog/show_post.jpg)](https://drive.google.com/file/d/1PZSjjj4lCQEjeHKoiks3jY9W7OzIHy15/view?usp=sharing "Google docs link")
