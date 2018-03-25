@@ -46,14 +46,14 @@
       </mat-chip-list>
     </mat-form-field>
     <div>
-      <label class="">Sadržaj: </label>
+      <label class="">Content: </label>
       <textarea id="article_content" class="mdl-textfield__input"
                 [(ngModel)]="post.body">
         </textarea>
     </div>
     <br>
     <div class="" *ngIf="task != 'copy'">
-      <label>Glavna slika: </label>
+      <label>Main image: </label>
       <button id="main_image_btn" mat-button onclick="document.getElementById('main_image').click()"
               style="float: right;">
         <mat-icon>photo</mat-icon>
@@ -76,7 +76,7 @@
   </mat-card-actions>
 </mat-card>
 <mat-card  style="margin-top: 60px; min-height: 100px;" *ngIf="post && task != 'copy'">
-  <mat-card-title class="intrev-card-title" style="padding: 10px;">Post gallery
+  <mat-card-title class="intrev-card-title" style="padding: 24px;">Post gallery
   </mat-card-title>
   <div>
     <div style=" padding: 20px; display: inline-block;" *ngFor="let image of oldImages">

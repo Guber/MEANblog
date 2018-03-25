@@ -17,11 +17,11 @@ if (app.get('env') === 'development') {
 } else {
     app.use(errorHandling.errorHandlingProd);
 }
-
+/*
 process.on('uncaughtException', function (err) {
     console.log('\r\nUncaught exception:\r\n ' + err);
     process.exit(1);
-});
+});*/
 
 // api routes definitions
 var routes = require('./routes.js');

@@ -1,6 +1,5 @@
 var UserModel = require('../models/users.js').model;
 var PostModel = require('../models/posts.js').model;
-var fs = require('fs');
 var fsUpload = require('../helpers/fs/fs-upload.js');
 var rimraf = require('rimraf');
 var Base64 = require('../helpers/base64/base64.js');
@@ -102,39 +101,51 @@ module.exports.update = function (req, res, next, resourceId) {
 module.exports.create = function (req, res, next) {
     delete req.body['_id'];
     var resourceData = req.body;
+
     if (resourceData['username'] === undefined || resourceData['newPassword'] === undefined) {
         return res.status(400).json({message: "Not enough data to create a user resource. Note: username and password are required."});
     }
 
-    resourceData['password'] = bcrypt.hash(resourceData['newPassword'], 10);
-
-    sequenceValue.getNextId("user_id").then(function (sequence, err) {
-        if (err) {
-            return next(err);
-        } else if (!sequence) {
-            return res.status(404).json({message: "No resource with that ID found in the database."});
-        }
-
-        resourceData._id = sequence.sequence_value;
-
-        fs.mkdirSync('./files/img/user/' + resourceData._id);
-
-        if (resourceData['profileImgBase64']) {
-            var imageBuffer = Base64.decodeBase64Image(req.body['profileImgBase64']);
-            delete resourceData['profileImgBase64'];
-            fsUpload.upload('/img/user/' + resourceData._id + '/' + 'profile.' + imageBuffer.type, imageBuffer.data).then(function (res, err) {
-                if (res) {
-                    resourceData['profileImg'] = 'profile.' + imageBuffer.type;
-                }
-            });
-        }
-        var newUser = new UserModel(resourceData);
-        newUser.save(function (err) {
+    bcrypt.hash(resourceData['newPassword'], 10, function (err, hash) {
+        resourceData['password'] = hash;
+        sequenceValue.getNextId("user_id").then(function (sequence, err) {
             if (err) {
                 return next(err);
+            } else if (!sequence) {
+                return res.status(404).json({message: "No resource with that ID found in the database."});
             }
-            return res.json(newUser);
-        });
+
+            resourceData._id = sequence.sequence_value;
+
+            fsUpload.mkdir('/img/user/' + resourceData._id).then(function () {
+                if (resourceData['profileImgBase64']) {
+                    var imageBuffer = Base64.decodeBase64Image(req.body['profileImgBase64']);
+                    delete resourceData['profileImgBase64'];
+                    fsUpload.upload('/img/user/' + resourceData._id + '/' + 'profile.' + imageBuffer.type, imageBuffer.data)
+                        .then(function () {
+                            resourceData['profileImg'] = 'profile.' + imageBuffer.type;
+                            var newUser = new UserModel(resourceData);
+                            newUser.save(function (err) {
+                                if (err) {
+                                    return next(err);
+                                }
+                                return res.json(newUser);
+                            });
+                        }).catch(function (err) {
+                            return next(err);
+                        }
+                    );
+                } else {
+                    var newUser = new UserModel(resourceData);
+                    newUser.save(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        return res.json(newUser);
+                    });
+                }
+            });
+        })
     });
 };
 
