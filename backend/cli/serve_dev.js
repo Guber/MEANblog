@@ -30,3 +30,7 @@ exec('cd frontend\\public &  ng serve --port 4202 --open', function(error, stdou
         console.log('exec error: ' + error);
     }
 });
+
+
+child1 = exec('cd backend &  nodemon server.js').stderr.pipe(process.stderr);
+child2 = exec('cd frontend\\admin &  ng serve --port 4201 --open').stderr.pipe(process.stderr);

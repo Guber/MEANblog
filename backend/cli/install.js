@@ -1,5 +1,5 @@
 var fsUpload = require('../helpers/fs/fs-upload.js');
-var config = require('../config.js');
+var config = require('../config/_config.js');
 var mongoose = require('mongoose');
 
 console.log("Install script initiated:");
@@ -27,7 +27,7 @@ mongoose.connection.on('connected', function () {
     mongoose.connection.db.createCollection('users');
     mongoose.connection.db.createCollection('posts');
     mongoose.connection.db.createCollection('categories');
-    CounterModel = require('../models').CounterModel;
+    CounterModel = require('../models/_models').CounterModel;
     var postCounter = new CounterModel({"_id": "posts", "sequence_value": 0});
     postCounter.save(function (err) {
         if (err) {

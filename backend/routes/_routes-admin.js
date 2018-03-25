@@ -1,8 +1,8 @@
-var categories = require('./routes/categories.js');
+var categories = require('./categories.js');
 module.exports.categories = categories.adminRouter;
 
-var posts = require('./routes/posts.js'); 
+var posts = require('./posts.js');
 module.exports.posts = posts.adminRouter;
 
-var users = require('./routes/users.js');
+var users = require('./users.js');
 module.exports.users = users.adminRouter;
