@@ -19,7 +19,7 @@ if (app.get('env') === 'development') {
 // api routes definitions
 var routes = require('./routes/_routes.js');
 //public api routes
-app.use('/files', express.static(uploadData.fsLocation));
+app.use('/files', express.static(config.uploadData.fsLocation));
 app.use('/api/categories', routes.categories);
 app.use('/api/posts', routes.posts);
 app.use('/api/users', routes.users);
