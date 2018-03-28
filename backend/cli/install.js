@@ -5,15 +5,12 @@ var mongoose = require('mongoose');
 console.log("Install script initiated:");
 console.log("\\r\\n##################################################\"");
 console.log("Step 1/x: Creating folders...");
-fsUpload.mkdir('../../' + config.uploadData.fsLocation).then(function () {
-    fsUpload.mkdir('../'+ config.uploadData.fsLocation + '/posts');
-}).then(function () {
-    fsUpload.mkdir('../../'+ config.uploadData.fsLocation + '/categories');
-}).then(function () {
-    fsUpload.mkdir('../../'+ config.uploadData.fsLocation + '/users');
-}).then(function () {
-    mongoose.connect('mongodb://' + config.database.dbServer + '/' + config.database.dbName);
-}).catch(function (err) {
+fsUpload.mkdir()
+    .then(fsUpload.mkdir('/posts'))
+    .then(fsUpload.mkdir('/categories'))
+    .then(fsUpload.mkdir('/users'))
+    .then(mongoose.connect('mongodb://' + config.database.dbServer + '/' + config.database.dbName))
+    .catch(function (err) {
         console.log("Error : " + err + "\r\n");
     }
 );
