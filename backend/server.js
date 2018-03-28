@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('./config/database.js');
+mongoose.Promise = require('promise');
 var app = express();
 //app.set('env', 'development');
 

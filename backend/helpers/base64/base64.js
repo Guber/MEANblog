@@ -7,7 +7,8 @@ module.exports.decodeBase64Image = function (dataString) {
     }
 
     response.type = matches[1].split('/')[1];
-    response.data = new Buffer(matches[2], 'base64');
+    response.data = new Buffer(matches[2], 'Base64');
+    response.name = new Date().getUTCMilliseconds() + "" + Math.floor((Math.random() * 1e6) + 1) + '.' + response.type;
 
     return response;
 };

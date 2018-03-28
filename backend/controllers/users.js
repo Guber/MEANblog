@@ -1,16 +1,12 @@
-var UserModel = require('../models/users.js').model;
-var PostModel = require('../models/posts.js').model;
-var fsUpload = require('../helpers/fs/fs-upload.js');
+var models = require('../models/_models.js');
+var helpers = require('../helpers/_helpers.js');
 var rimraf = require('rimraf');
-var Base64 = require('../helpers/base64/base64.js');
-var sequenceValue = require('../helpers/mongodb/sequence-value.js');
-var selectOptions = require('../helpers/mongodb/select-options.js');
 var bcrypt = require('bcrypt');
 
 module.exports.list = function (req, res, next) {
-    var options = selectOptions.setOptions(req);
+    var options = helpers.SelectOptions.setOptions(req);
     if (options.filter) {
-        userModel.find({$or: [{username: options.filter}, {firstName: options.filter}, {lastName: options.filter}]})
+        models.UserModel.find({$or: [{username: options.filter}, {firstName: options.filter}, {lastName: options.filter}]})
             .skip(options.offset).limit(options.limit).sort(options.orderDirection + '' + options.orderBy).exec(
             function (err, docs) {
                 if (err) {
@@ -20,7 +16,7 @@ module.exports.list = function (req, res, next) {
             }
         );
     } else {
-        UserModel.find().skip(options.offset).limit(options.limit).sort(options.orderDirection + '' + options.orderBy).exec(
+        models.UserModel.find().skip(options.offset).limit(options.limit).sort(options.orderDirection + '' + options.orderBy).exec(
             function (err, docs) {
                 if (err) {
                     return next(err);
@@ -32,7 +28,7 @@ module.exports.list = function (req, res, next) {
 };
 
 module.exports.count = function (req, res, next) {
-    UserModel.count(function (err, doc) {
+    models.UserModel.count(function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -41,7 +37,7 @@ module.exports.count = function (req, res, next) {
 };
 
 module.exports.show = function (req, res, next, resourceId) {
-    UserModel.findById(resourceId, function (err, doc) {
+    models.UserModel.findById(resourceId, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -54,7 +50,7 @@ module.exports.show = function (req, res, next, resourceId) {
 ;
 
 module.exports.showPosts = function (req, res, next, resourceId) {
-    PostModel.find({'authorId': resourceId}, function (err, doc) {
+    models.PostModel.find({'authorId': resourceId}, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -70,9 +66,9 @@ module.exports.update = function (req, res, next, resourceId) {
     delete resourceData['_id'];
 
     if (resourceData['profileImgBase64']) {
-        var imageBuffer = Base64.decodeBase64Image(req.body['profileImgBase64']);
+        var imageBuffer = helpers.Base64.decodeBase64Image(req.body['profileImgBase64']);
         delete resourceData['profileImgBase64'];
-        fsUpload.upload('/img/user/' + resourceId + '/' + 'profile.' + imageBuffer.type, imageBuffer.data).then(function (file, err) {
+        helpers.FSUpload.upload('/img/user/' + resourceId + '/' + 'profile.' + imageBuffer.type, imageBuffer.data).then(function (file, err) {
             if (err) {
                 return next(err);
             }
@@ -87,7 +83,7 @@ module.exports.update = function (req, res, next, resourceId) {
         delete resourceData['newPassword'];
     }
 
-    UserModel.findByIdAndUpdate(resourceId, resourceData, {'new': true}, function (err, doc) {
+    models.UserModel.findByIdAndUpdate(resourceId, resourceData, {'new': true}, function (err, doc) {
         if (err) {
             return next(err);
         }
@@ -108,7 +104,7 @@ module.exports.create = function (req, res, next) {
 
     bcrypt.hash(resourceData['newPassword'], 10, function (err, hash) {
         resourceData['password'] = hash;
-        sequenceValue.getNextId("user_id").then(function (sequence, err) {
+        helpers.SequenceValue.getNextId("user_id").then(function (sequence, err) {
             if (err) {
                 return next(err);
             } else if (!sequence) {
@@ -117,14 +113,14 @@ module.exports.create = function (req, res, next) {
 
             resourceData._id = sequence.sequence_value;
 
-            fsUpload.mkdir('/img/user/' + resourceData._id).then(function () {
+            helpers.FSUpload.mkdir('/img/user/' + resourceData._id).then(function () {
                 if (resourceData['profileImgBase64']) {
-                    var imageBuffer = Base64.decodeBase64Image(req.body['profileImgBase64']);
+                    var imageBuffer = helpers.Base64.decodeBase64Image(req.body['profileImgBase64']);
                     delete resourceData['profileImgBase64'];
-                    fsUpload.upload('/img/user/' + resourceData._id + '/' + 'profile.' + imageBuffer.type, imageBuffer.data)
+                    helpers.FSUpload.upload('/img/user/' + resourceData._id + '/' + 'profile.' + imageBuffer.type, imageBuffer.data)
                         .then(function () {
                             resourceData['profileImg'] = 'profile.' + imageBuffer.type;
-                            var newUser = new UserModel(resourceData);
+                            var newUser = new models.UserModel(resourceData);
                             newUser.save(function (err) {
                                 if (err) {
                                     return next(err);
@@ -136,7 +132,7 @@ module.exports.create = function (req, res, next) {
                         }
                     );
                 } else {
-                    var newUser = new UserModel(resourceData);
+                    var newUser = new models.UserModel(resourceData);
                     newUser.save(function (err) {
                         if (err) {
                             return next(err);
@@ -150,7 +146,7 @@ module.exports.create = function (req, res, next) {
 };
 
 module.exports.remove = function (req, res) {
-    UserModel.findByIdAndRemove(req.params.id, function (err, response) {
+    models.UserModel.findByIdAndRemove(req.params.id, function (err, response) {
         if (err) {
             return next(err);
         }
@@ -161,3 +157,4 @@ module.exports.remove = function (req, res) {
         }
     });
 };
+
