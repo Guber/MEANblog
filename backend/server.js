@@ -34,4 +34,4 @@ app.use('/api/admin/posts', adminRoutes.posts);
 app.use('/api/admin/users', adminRoutes.users);
 
 // dedicated app port
-app.listen(3000);
+app.listen(1337);
