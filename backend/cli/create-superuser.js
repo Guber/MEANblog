@@ -31,7 +31,7 @@ function password2PromptResponse(input) {
         console.log("Passwords do not match.");
         helpers.Prompt.prompt('Type password:').then(password1PromptResponse);
     } else {
-        bcrypt.hash(resourceData.password1, 10).then(function (err, hash) {
+        bcrypt.hash(resourceData.password1, 10).then(function (hash) {
             resourceData.password = hash;
             delete resourceData.password1;
             delete resourceData.password2;
@@ -46,7 +46,7 @@ function password2PromptResponse(input) {
             }).then(function(directory, err){
                 resourceData.admin = true;
                 var newUser = new models.UserModel(resourceData);
-                newUser.save();
+                return newUser.save();
             }).then(function (doc,errr) {
                 console.log("Successfully created a new user: " + resourceData.username);
                 process.exit();
