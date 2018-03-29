@@ -48,7 +48,7 @@ module.exports.create = function (req, res, next) {
         } else if (!sequence) {
             return res.status(404).json({message: "No resource with that ID found in the database."});
         }
-        resourceData._id = sequence.sequence_value;
+        resourceData._id = sequence.sequenceValue;
         helpers.FSUpload.mkdir('/img/categories/' + resourceData._id + "/").then(function (directory, err) {
             if (err) {
                 return next(err);

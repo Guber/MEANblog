@@ -111,7 +111,7 @@ module.exports.create = function (req, res, next) {
                 return res.status(404).json({message: "No resource with that ID found in the database."});
             }
 
-            resourceData._id = sequence.sequence_value;
+            resourceData._id = sequence.sequenceValue;
 
             helpers.FSUpload.mkdir('/img/user/' + resourceData._id).then(function () {
                 if (resourceData['profileImgBase64']) {

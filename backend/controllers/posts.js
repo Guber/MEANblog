@@ -52,7 +52,7 @@ module.exports.create = function (req, res, next) {
 
     helpers.SequenceValue.getNextId("post_id")
         .then(function (sequence) {
-            resourceData._id = sequence.sequence_value;
+            resourceData._id = sequence.sequenceValue;
             helpers.FSUpload.mkdir('/img/posts/' + resourceData._id + "/")
         }).then(function (directory, err) {
         if (resourceData['mainImgBase64']) {
