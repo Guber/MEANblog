@@ -9,53 +9,51 @@ helpers.Prompt.prompt('Desired username:').then(usernamePromptResponse);
 
 function usernamePromptResponse(input) {
     resourceData.username = input;
-    models.UserModel.findOne({ 'username': input }).then(function(doc){
-        if(!doc){
-            return helpers.Prompt.prompt('Type password:');
+    models.UserModel.findOne({'username': input}).then(function (doc) {
+        if (!doc) {
+            helpers.Prompt.prompt('Type password:').then(password1PromptResponse);
         } else {
             console.log("Username already in use.");
             helpers.Prompt.prompt('Desired username:').then(usernamePromptResponse);
-            //process.exit();
         }
     });
 }
-/*
-.then(function (input) {
+
+function password1PromptResponse(input) {
     resourceData.password1 = input;
-    return helpers.Prompt.prompt('Re-type password:');
-}).then(function (input) {
+    helpers.Prompt.prompt('Re-type password:').then(password2PromptResponse);
+}
+
+
+function password2PromptResponse(input) {
     resourceData.password2 = input;
     if (resourceData.password1 !== resourceData.password2) {
-        console.log("Passwords do not match. Exiting.");
-        process.exit();
+        console.log("Passwords do not match.");
+        helpers.Prompt.prompt('Type password:').then(password1PromptResponse);
     } else {
-        bcrypt.hash(resourceData.password1, 10, function (err, hash) {
+        bcrypt.hash(resourceData.password1, 10).then(function (err, hash) {
             resourceData.password = hash;
             delete resourceData.password1;
             delete resourceData.password2;
 
-            helpers.SequenceValue.getNextId("users").then(function (sequence, err) {
+            helpers.SequenceValue.getNextId("users").then(function (sequence) {
                 if (!sequence) {
                     console.log("Error fetching sequence id.");
                     process.exit();
                 }
                 resourceData._id = sequence.sequenceValue;
-                console.log(sequence);
-                helpers.FSUpload.mkdir('/img/users/' + resourceData._id+'/').then(function () {
-                    var newUser = new models.UserModel(resourceData);
-                    console.log(resourceData);
-                    newUser.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                            process.exit();
-                        }
-                        console.log("Successfully created a new user: " + resourceData.username);
-                        process.exit();
-                    });
-                }).catch(function (err) {
-                    console.log(err);
-                });
+                helpers.FSUpload.mkdir('/img/users/' + resourceData._id + '/');
+            }).then(function(directory, err){
+                resourceData.admin = true;
+                var newUser = new models.UserModel(resourceData);
+                newUser.save();
+            }).then(function (doc,errr) {
+                console.log("Successfully created a new user: " + resourceData.username);
+                process.exit();
+            }).catch(function (err) {
+                console.log(err);
+                process.exit();
             })
         });
     }
-});*/
+}
