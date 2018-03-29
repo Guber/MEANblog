@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   dataUrl = environment.dataUrl;
   title = 'app';
   selfUser: User;
-  defaultSelfProfileImgUrl = '/assets/img/user.jpg';
+  defaultSelfProfileImgUrl = 'assets/img/user.jpg';
   selfProfileImgUrl = this.defaultSelfProfileImgUrl;
   navigationUrl: String;
   breadcrumbs: Array<String>;

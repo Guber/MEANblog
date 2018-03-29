@@ -17,7 +17,7 @@ export class UsersComponent implements OnInit {
   users: User[];
   displayedColumns = ['image', 'username', 'id', 'modified',  'actions'];
   dataSource: UserDataSource | null;
-  defaultSelfProfileImgUrl = '/assets/img/user.jpg';
+  defaultSelfProfileImgUrl = 'assets/img/user.jpg';
   totalUsers: number;
 
   constructor(private usersService: UsersService, private router: Router) {

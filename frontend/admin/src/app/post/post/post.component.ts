@@ -35,7 +35,7 @@ export class PostComponent implements OnInit {
   tagInput = '';
   private postImgUrl: String;
   private mainImgBase64: string;
-  private defaultPostImgUrl: String = '/assets/img/image.png';
+  private defaultPostImgUrl: String = 'assets/img/image.png';
   private fetchLock = false;
 
   constructor(private postsService: PostsService, private usersService: UsersService, private categoryService: CategoriesService,

@@ -22,7 +22,7 @@ export class PostsComponent implements OnInit {
   displayedColumns = ['_id', 'created', 'author', 'title', 'thumbnail', 'actions'];
   dataSource: PostsDataSource | null;
   totalPages: number;
-  private defaultPostImgUrl = '/assets/img/image.png';
+  private defaultPostImgUrl = 'assets/img/image.png';
 
   constructor(private postsService: PostsService) {
   }

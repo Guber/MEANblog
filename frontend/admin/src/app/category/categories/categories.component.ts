@@ -15,7 +15,7 @@ export class CategoriesComponent implements OnInit {
 
   posts: Post[] = [];
   categories: Category[];
-  defaultCategoryImgUrl = '/assets/img/image.png';
+  defaultCategoryImgUrl = 'assets/img/image.png';
   private dataUrl = environment.dataUrl;
 
   constructor(private categoriesService: CategoriesService, private route: ActivatedRoute) {  }

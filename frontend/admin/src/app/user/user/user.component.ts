@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   posts: Post[] = [];
   user: User = new User();
   task: String;
-  defaultSelfProfileImgUrl = '/assets/img/user.jpg';
+  defaultSelfProfileImgUrl = 'assets/img/user.jpg';
   selfProfileImgUrl = this.defaultSelfProfileImgUrl;
 
   newPassword: string;

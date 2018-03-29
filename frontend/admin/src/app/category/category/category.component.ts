@@ -19,7 +19,7 @@ export class CategoryComponent implements OnInit {
   file: File;
   categoryImgUrl: String;
   private mainImgBase64: string;
-  private defaultCategoryImgUrl: String = '/assets/img/image.png';
+  private defaultCategoryImgUrl: String = 'assets/img/image.png';
   private dataUrl = environment.dataUrl;
 
   constructor(private categoriesService: CategoriesService, private route: ActivatedRoute, private router: Router,
